@@ -6,15 +6,23 @@ import productsRouter from './routers/productsRouter.js';
 const port = process.env.PORT || 8000;
 
 const requestHandler = (req, res) => {
-  const { url } = req;
-  const [, route, id] = url.split('/');
+  // const { url } = req;
+  // const [, route, id] = url.split('/');
+  const url = new URL(req.url, `http://${req.headers.host}`);
+
+  const segments = url.pathname.split('/').filter(Boolean);
+  const [route = '', id] = segments;
+  const queryParams = Object.fromEntries(url.searchParams);
+
+  req.params = { id };
+  req.query = queryParams;
 
   switch (route) {
     case '':
       respond(res, 200, 'text/plain', 'Healthy');
       break;
     case 'products':
-      req.params = { id };
+      // req.params = { id };
       productsRouter(req, res);
       break;
     default:
