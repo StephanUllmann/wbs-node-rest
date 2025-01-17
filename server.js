@@ -6,7 +6,7 @@ import productsRouter from './routers/productsRouter.js';
 const port = process.env.PORT || 8000;
 
 const requestHandler = (req, res) => {
-  const { method, url } = req;
+  const { url } = req;
   const [, route, id] = url.split('/');
 
   switch (route) {
@@ -18,9 +18,7 @@ const requestHandler = (req, res) => {
       productsRouter(req, res);
       break;
     default:
-      res.statusCode = 404;
-      res.setHeader('Content-Type', 'text/plain');
-      res.end('Not found\n');
+      respond(res, 404, 'text/plain', 'Not found');
   }
 };
 
